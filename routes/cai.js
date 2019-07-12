@@ -5,16 +5,16 @@ const request = require('request');
 router.post('/getTasks', (req, res) => {
 
     let sendToCai = {
-        "replies": [],
-        "conversation": {
-            "language": "en"
+        replies: [],
+        conversation: {
+            language: "en"
         }
     };
     
     let reply = {
-        "outputSpeech": "SSML",
-        "type": "text",
-        "content": ""
+        outputSpeech: "SSML",
+        type: "text",
+        content: ""
     };
     
 
@@ -33,10 +33,10 @@ router.post('/getTasks', (req, res) => {
         
         reply.content = body.d.results[0].TaskTitle;
         sendToCai.replies.push(reply);
-        sendToCai.conversation.memory = {
-            "instanceId": body.d.results[0].InstanceID,
-            "task_index": 0
-        }
+        // sendToCai.conversation.memory = {
+        //     "instanceId": body.d.results[0].InstanceID,
+        //     "task_index": 0
+        // }
 
         res.json(sendToCai);       
 
