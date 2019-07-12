@@ -18,38 +18,45 @@ router.post('/getTasks', (req, res) => {
     };
     
     sendToCai.replies.push(reply);
-    res.json(sendToCai);    
+    sendToCai.conversation.memory = {
+        instanceId: "00078788",
+        task_index: 0
+    }
+    res.send(sendToCai);    
 
-    // request.get('https://p2001172697trial-trial.apim1.hanatrial.ondemand.com:443/p2001172697trial/Workflow_approval/TaskCollection?sap-client=400&$format=json&$filter=Status%20eq%20%27READY%27', {
-    //     'auth': {
-    //         'user': 'pritamsa',
-    //         'pass': 'rupu@0801'
-    //     },
-    //     'json': true
-    // }, (err, resp, body) => {
-    //     if (err) {
-    //         return console.log(err);
-    //     }
+    /*
+    request.get('https://p2001172697trial-trial.apim1.hanatrial.ondemand.com:443/p2001172697trial/Workflow_approval/TaskCollection?sap-client=400&$format=json&$filter=Status%20eq%20%27READY%27', {
+        'auth': {
+            'user': 'pritamsa',
+            'pass': 'rupu@0801'
+        },
+        'json': true
+    }, (err, resp, body) => {
+        if (err) {
+            return console.log(err);
+        }
         
-    //     console.log(body);
+        console.log(body);
         
-    //     reply.content = body.d.results[0].TaskTitle;
-    //     sendToCai.replies.push(reply);
-    //     // sendToCai.conversation.memory = {
-    //     //     "instanceId": body.d.results[0].InstanceID,
-    //     //     "task_index": 0
-    //     // }
+        reply.content = body.d.results[0].TaskTitle;
+        sendToCai.replies.push(reply);
+        sendToCai.conversation.memory = {
+            "instanceId": body.d.results[0].InstanceID,
+            "task_index": 0
+        }
        
-    //     res.json(JSON.stringify(sendToCai));       
+        res.json(JSON.stringify(sendToCai));  
+         
 
-    // });
+    });
+    */  
 
 });
 
-// router.post('/getDetail', (req, res) => {
+router.post('/getDetail', (req, res) => {
 
-//     res.send({ status: 'At cai' })
+    res.send({ status: 'At cai' })
 
-// });
+});
 
 module.exports = router;
