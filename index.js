@@ -21,6 +21,11 @@ app.use(morgan('tiny'));
 // app.use(favicon(__dirname + '/static/favicon.ico'));
 
 //use - routes
+app.post('/errors', function(req, res) {
+    console.log(req.body);
+    res.sendStatus(200);
+  });
+  
 app.use('/api', home);
 app.use('/api/cai', cai)
 
