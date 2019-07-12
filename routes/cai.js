@@ -38,7 +38,7 @@ router.post('/getTasks', (req, res) => {
         //     "task_index": 0
         // }
        
-        res.send(JSON.stringify(sendToCai));       
+        res.json(JSON.stringify(sendToCai));       
 
     });
 
