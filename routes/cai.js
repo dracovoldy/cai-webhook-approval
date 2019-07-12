@@ -53,7 +53,7 @@ router.post('/getTasks', (req, res) => {
 
 });
 
-router.post('/getDetail', (req, res) => {
+router.post('/getDetails', (req, res) => {
 
     res.send({ status: 'At cai' })
 
