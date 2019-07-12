@@ -37,8 +37,8 @@ router.post('/getTasks', (req, res) => {
         //     "instanceId": body.d.results[0].InstanceID,
         //     "task_index": 0
         // }
-
-        res.json(sendToCai);       
+       
+        res.send(JSON.stringify(sendToCai));       
 
     });
 
