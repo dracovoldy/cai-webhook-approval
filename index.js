@@ -6,6 +6,7 @@ const favicon = require('serve-favicon');
 
 //Require Routes
 const home = require('./routes/home');
+const cai = require('./routes/cai');
 
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(favicon(__dirname + '/static/favicon.ico'));
 
 //use - routes
 app.use('/api', home);
+app.use('/api/cai', cai)
 
 
 const port = process.env.PORT || 8080;
