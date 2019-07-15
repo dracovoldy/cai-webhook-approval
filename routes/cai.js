@@ -90,6 +90,32 @@ router.post('/getTasks', (req, res) => {
                 res.json(sendToCai);
             }
 
+        } else if (req.body.conversation.skill === "repeat_task") {
+            if (req.body.conversation.memory.task_index === undefined) {
+                reply.content = "I can get you your pending tasks. Please say show my tasks to get your task list.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {}
+                res.json(sendToCai);
+            } else if (body.d.results.length > 0 && req.body.conversation.memory.task_index < body.d.results.length) {
+                reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle + "." +
+                    "\nPlease say next to show next task or, take action or, ask for more details.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {
+                    "instanceId": req.body.conversation.memory.instanceId,
+                    "task_index": req.body.conversation.memory.task_index
+                }
+                res.json(sendToCai);
+            } else if (body.d.results.length <= 0) {
+                reply.content = "You don't have any pending tasks.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {}
+                res.json(sendToCai);
+            } else {
+                reply.content = "I'm facing issues answering that, please try again in a while.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {}
+                res.json(sendToCai);
+            }
         }
     });
 });
