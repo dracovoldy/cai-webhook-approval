@@ -38,7 +38,7 @@ router.post('/getTasks', (req, res) => {
         }
 
         console.log(body);
-        if (req.body.conversation.memory === undefined) {
+        if (req.body.conversation.memory.task_index === undefined) {
             reply.content = body.d.results[0].TaskTitle;
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {
