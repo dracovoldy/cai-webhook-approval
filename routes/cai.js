@@ -38,7 +38,7 @@ router.post('/getTasks', (req, res) => {
         }
 
         console.log(body);
-        if (req.body.conversation.skill === "get_my_tasks" && req.body.conversation.memory.task_index === undefined) {
+        if (req.body.conversation.skill === "get_my_tasks") {
             reply.content = "You have " + body.d.results.length + " pending tasks.\n" +  body.d.results[0].TaskTitle + "."
             "\nPlease say next to show next task. Or take action. Or ask for more details.";
             sendToCai.replies.push(reply);
