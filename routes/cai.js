@@ -97,7 +97,7 @@ router.post('/getTasks', (req, res) => {
                 sendToCai.conversation.memory = {}
                 res.json(sendToCai);
             } else if (body.d.results.length > 0 && req.body.conversation.memory.task_index < body.d.results.length) {
-                reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle + "." +
+                reply.content = body.d.results[req.body.conversation.memory.task_index - 1].TaskTitle + "." +
                     "\nPlease say next to show next task or, take action or, ask for more details.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
