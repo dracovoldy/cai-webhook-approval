@@ -18,12 +18,6 @@ router.post('/getTasks', (req, res) => {
         content: "Mock reply"
     };
 
-    // sendToCai.replies.push(reply);
-    // sendToCai.conversation.memory = {
-    //     instanceId: "00078788",
-    //     task_index: 0
-    // }
-    // res.send(sendToCai);    
     console.log(req.body);
 
     request.get('https://p2001172697trial-trial.apim1.hanatrial.ondemand.com:443/p2001172697trial/Workflow_approval/TaskCollection?sap-client=400&$format=json&$filter=Status%20eq%20%27READY%27', {
@@ -38,42 +32,66 @@ router.post('/getTasks', (req, res) => {
         }
 
         console.log(body);
+
         if (req.body.conversation.skill === "get_my_tasks") {
-            reply.content = "You have " + body.d.results.length + " pending tasks.\n" +  body.d.results[0].TaskTitle + "." +
-            "\nPlease say next to show next task. Or take action. Or ask for more details.";
-            sendToCai.replies.push(reply);
-            sendToCai.conversation.memory = {
-                "instanceId": body.d.results[0].InstanceID,
-                "task_index": 1
+            if (body.d.results.length > 0) {
+                reply.content = "You have " + body.d.results.length + " pending tasks.\n" + body.d.results[0].TaskTitle + "." +
+                    "\nPlease say next to show next task or, take action or, ask for more details.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {
+                    "instanceId": body.d.results[0].InstanceID,
+                    "task_index": 1
+                }
+                res.json(sendToCai);
+            } else if (body.d.results.length <= 0) {
+                reply.content = "You don't have any pending tasks.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {}
+                res.json(sendToCai);
+            } else {
+                reply.content = "I'm facing issues answering that, please try again in a while.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {}
+                res.json(sendToCai);
             }
 
-            res.json(sendToCai);
-        } else if(req.body.conversation.skill === "show_next_task" && req.body.conversation.memory.task_index < body.d.results.length){
-            reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle + "." + 
-            "\nPlease say next to show next task. Or take action. Or ask for more details.";
-            sendToCai.replies.push(reply);
-            sendToCai.conversation.memory = {
-                "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
-                "task_index": req.body.conversation.memory.task_index + 1
+        } else if (req.body.conversation.skill === "show_next_task") {
+            if (body.d.results.length > 0 && req.body.conversation.memory.task_index < body.d.results.length) {
+                reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle + "." +
+                    "\nPlease say next to show next task or, take action or, ask for more details.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {
+                    "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
+                    "task_index": req.body.conversation.memory.task_index + 1
+                }
+                res.json(sendToCai);
+            } else if (body.d.results.length > 0 && req.body.conversation.memory.task_index >= body.d.results.length) {
+                reply.content = "No more tasks to show.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {
+                    "instanceId": req.body.conversation.memory.instanceId,
+                    "task_index": req.body.conversation.memory.task_index
+                }
+                res.json(sendToCai);
+            } else if (body.d.results.length <= 0) {
+                reply.content = "You don't have any pending tasks.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {}
+                res.json(sendToCai);
+            } else if (req.body.conversation.memory.task_index === undefined) {
+                reply.content = "I can get you your pending tasks. Please say show my tasks to get your task list.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {}
+                res.json(sendToCai);
+            } else {
+                reply.content = "I'm facing issues answering that, please try again in a while.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {}
+                res.json(sendToCai);
             }
 
-            res.json(sendToCai);
-        } else if(req.body.conversation.skill === "show_next_task" && req.body.conversation.memory.task_index >= body.d.results.length){
-            reply.content = "No more tasks to show.";
-            sendToCai.replies.push(reply);
-            sendToCai.conversation.memory = {
-                "instanceId": req.body.conversation.memory.instanceId,
-                "task_index": req.body.conversation.memory.task_index
-            }
-
-            res.json(sendToCai);
         }
-
-
-
     });
-
-
 });
 
 router.post('/getDetails', (req, res) => {
