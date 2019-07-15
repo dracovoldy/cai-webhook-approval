@@ -26,7 +26,13 @@ router.post('/', (req, res) => {
         },
         'json': true
     }, (err, resp, body) => {
-        if (err) {
+        if (resp.statusCode !== 200) {
+            
+            reply.content = "I'm facing issues answering that, please try again in a while.";
+            sendToCai.replies.push(reply);
+            sendToCai.conversation.memory = {}
+            res.json(sendToCai);
+
             return console.log(err);
         }
 
@@ -120,8 +126,18 @@ router.post('/', (req, res) => {
 });
 
 router.post('/getDetails', (req, res) => {
+    let url = "https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/C_PURCHASEORDER_FS_SRV/C_PurchaseOrderFs(PurchaseOrder='4500000352')";
+    let url2 = "https://p2001172697trial-trial.apim1.hanatrial.ondemand.com:443/p2001172697trial/Workflow_approval/TaskCollection?sap-client=400&$format=json&$filter=Status%20eq%20%27READY%27";
 
-    res.send({ status: 'At cai' })
+    request.get(url, {
+        'auth': {
+            'user': 'pritamsa',
+            'pass': 'rupu@0801'
+        },
+        'json': true
+    }, (err, resp, body) => {
+        res.json(body);
+    });
 
 });
 
