@@ -38,8 +38,9 @@ router.post('/getTasks', (req, res) => {
         }
 
         console.log(body);
-        if (req.body.conversation.memory.task_index === undefined) {
-            reply.content = body.d.results[0].TaskTitle;
+        if (req.body.conversation.skill === "get_my_tasks" && req.body.conversation.memory.task_index === undefined) {
+            reply.content = "You have " + body.d.results.length + " pending tasks.\n" +  body.d.results[0].TaskTitle + "."
+            "\nPlease say next to show next task. Or take action. Or ask for more details.";
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {
                 "instanceId": body.d.results[0].InstanceID,
@@ -47,8 +48,9 @@ router.post('/getTasks', (req, res) => {
             }
 
             res.json(sendToCai);
-        } else if(req.body.conversation.memory.task_index < body.d.results.length){
-            reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle;
+        } else if(req.body.conversation.skill === "show_next_task" && req.body.conversation.memory.task_index < body.d.results.length){
+            reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle + "."
+            "\nPlease say next to show next task. Or take action. Or ask for more details.";
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {
                 "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
@@ -56,7 +58,7 @@ router.post('/getTasks', (req, res) => {
             }
 
             res.json(sendToCai);
-        } else{
+        } else if(req.body.conversation.skill === "show_next_task" && req.body.conversation.memory.task_index >= body.d.results.length){
             reply.content = "No more tasks to show.";
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {
