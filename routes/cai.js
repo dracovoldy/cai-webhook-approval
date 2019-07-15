@@ -2,12 +2,11 @@ const express = require('express');
 const router = express.Router();
 const request = require('request');
 
-router.post('/getTasks', (req, res) => {
+router.post('/', (req, res) => {
 
     let sendToCai = {
         replies: [],
         conversation: {
-
             language: "en"
         }
     };
@@ -92,7 +91,7 @@ router.post('/getTasks', (req, res) => {
 
         } else if (req.body.conversation.skill === "repeat_task") {
             if (req.body.conversation.memory.task_index === undefined) {
-                reply.content = "I can get you your pending tasks. Please say show my tasks to get your task list.";
+                reply.content = "I can get you your pending tasks. Please say, show my tasks to get your task list.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {}
                 res.json(sendToCai);
