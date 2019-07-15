@@ -23,7 +23,7 @@ router.post('/getTasks', (req, res) => {
     //     task_index: 0
     // }
     // res.send(sendToCai);    
-
+    console.log(req.body);
     
     request.get('https://p2001172697trial-trial.apim1.hanatrial.ondemand.com:443/p2001172697trial/Workflow_approval/TaskCollection?sap-client=400&$format=json&$filter=Status%20eq%20%27READY%27', {
         'auth': {
