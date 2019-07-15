@@ -47,12 +47,21 @@ router.post('/getTasks', (req, res) => {
             }
 
             res.json(sendToCai);
-        } else {
+        } else if(req.body.conversation.memory.task_index < body.d.results.length){
             reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle;
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {
                 "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
                 "task_index": req.body.conversation.memory.task_index + 1
+            }
+
+            res.json(sendToCai);
+        } else{
+            reply.content = "No more tasks to show.";
+            sendToCai.replies.push(reply);
+            sendToCai.conversation.memory = {
+                "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
+                "task_index": req.body.conversation.memory.task_index
             }
 
             res.json(sendToCai);
