@@ -59,7 +59,10 @@ router.post('/getTasks', (req, res) => {
         } else{
             reply.content = "No more tasks to show.";
             sendToCai.replies.push(reply);
-            sendToCai.conversation.memory = {}
+            sendToCai.conversation.memory = {
+                "instanceId": req.body.conversation.memory.instanceId,
+                "task_index": req.body.conversation.memory.task_index
+            }
 
             res.json(sendToCai);
         }
