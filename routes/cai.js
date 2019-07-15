@@ -48,11 +48,11 @@ router.post('/getTasks', (req, res) => {
 
             res.json(sendToCai);
         } else {
-            reply.content = body.d.results[req.body.memory.task_index].TaskTitle;
+            reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle;
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {
-                "instanceId": body.d.results[req.body.memory.task_index].InstanceID,
-                "task_index": req.body.memory.task_index + 1
+                "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
+                "task_index": req.body.conversation.memory.task_index + 1
             }
 
             res.json(sendToCai);
