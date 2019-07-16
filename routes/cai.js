@@ -26,9 +26,9 @@ router.post('/', (req, res) => {
             'pass': 'rupu@0801'
         },
         'json': true,
-        'timeout': 1200
+        'timeout': 1000
     }, (err, resp, body) => {
-        if (resp.statusCode !== 200) {
+        if (err.connect === true) {
 
             reply.content = "I'm facing issues answering that, please try again in a while.";
             sendToCai.replies.push(reply);
