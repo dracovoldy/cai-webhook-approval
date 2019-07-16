@@ -173,38 +173,44 @@ router.post('/getDetails', (req, res) => {
     ]).then(axios.spread((response1, response2) => {
         console.log(response1.data);
         console.log(response2.data);
+
+        let header = response1.data.d;
+        let item = response2.data.d;
+
+        reply.content = header.PurchaseOrderType_Text + " <say-as interpret-as='spell-out'>" + header.PurchaseOrder + "</say-as> has a net amount of " + header.DocumentCurrency + " " + header.PurchaseOrderNetAmount +
+            ". Supplier is " + header.SupplierName + " and was created by " + header.CreatedByUser + ".\n";
+
+        reply.content = reply.content + "It has " + item.results.length + "order items.\n"
+
+        let parseItems = (aItems) => {
+            let itemsText = "";
+            aItems.map(oItem => {
+                let t = "Purchase order item <say-as interpret-as='spell-out'>" + oItem.PurchaseOrderItem + "</say-as>, is Material <say-as interpret-as='spell-out'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
+                    ", with quantity of " + oItem.OrderQuantity + " and a net unit price of " + oItem.DocumentCurrency + " " + oItem.NetPriceAmount + ".\n";
+
+                itemsText = itemsText + t;
+            })
+            return itemsText;
+        };
+
+        reply.content = reply.content + parseItems(item.results);
+
+        sendToCai.replies.push(reply);
+        sendToCai.conversation.memory = {
+            "instanceId": req.body.conversation.memory.instanceId,
+            "purchOrder": req.body.conversation.memory.purchOrder,
+            "task_index": req.body.conversation.memory.task_index
+        }
+        res.send(sendToCai);
+
     })).catch(error => {
         console.log(error);
+
+        reply.content = "I'm facing issues answering that, please try again in a while.";
+        sendToCai.replies.push(reply);
+        sendToCai.conversation.memory = {}
+        res.send(sendToCai);
     });
-
-    // request.get(url, {
-    //     'auth': {
-    //         'user': 'pritamsa',
-    //         'pass': 'rupu@0801'
-    //     },
-    //     'json': true
-    // }, (err, resp, body) => {
-    //     if (resp.statusCode !== 200) {
-
-    //         reply.content = "I'm facing issues answering that, please try again in a while.";
-    //         sendToCai.replies.push(reply);
-    //         sendToCai.conversation.memory = {}
-    //         res.send(sendToCai);
-
-    //         return console.log(err);
-    //     }
-
-    //     reply.content = body.d.PurchaseOrderType_Text + " <say-as interpret-as='spell-out'>" + body.d.PurchaseOrder + "</say-as> has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
-    //         ". Supplier is " + body.d.SupplierName + " and was created by " + body.d.CreatedByUser + ".";
-
-    //     sendToCai.replies.push(reply);
-    //     sendToCai.conversation.memory = {
-    //         "instanceId": req.body.conversation.memory.instanceId,
-    //         "purchOrder": req.body.conversation.memory.purchOrder,
-    //         "task_index": req.body.conversation.memory.task_index
-    //     }
-    //     res.send(sendToCai);
-    // });
 
 });
 
