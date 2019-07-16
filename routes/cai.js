@@ -164,8 +164,8 @@ router.post('/getDetails', (req, res) => {
             return console.log(err);
         }
 
-        reply.content = "<speak>" + body.d.PurchaseOrderType_Text + ", " + body.d.PurchaseOrder + " has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
-            ".\n Supplier is " + body.d.SupplierName + ", and was created by " + body.d.CreatedByUser + ". <speak>";
+        reply.content = body.d.PurchaseOrderType_Text + ", " + body.d.PurchaseOrder + " has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
+            ".\nSupplier is " + body.d.SupplierName + ", and was created by " + body.d.CreatedByUser + ".";
 
         sendToCai.replies.push(reply);
         sendToCai.conversation.memory = {
