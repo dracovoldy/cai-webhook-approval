@@ -165,7 +165,7 @@ router.post('/getDetails', (req, res) => {
         }
 
         reply.content = "<speak>" + body.d.PurchaseOrderType_Text + ", " + body.d.PurchaseOrder + " has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
-            ". Supplier is " + body.d.SupplierName + ".\n and was created by " + body.d.CreatedByUser + ". <speak>";
+            ".\n Supplier is " + body.d.SupplierName + ", and was created by " + body.d.CreatedByUser + ". <speak>";
 
         sendToCai.replies.push(reply);
         sendToCai.conversation.memory = {
