@@ -142,7 +142,7 @@ router.post('/getDetails', (req, res) => {
         type: "text",
         content: "Mock reply"
     };
-    
+
     let purchOrder = req.body.conversation.memory.purchOrder;
     let url = "https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/C_PURCHASEORDER_FS_SRV/C_PurchaseOrderFs(PurchaseOrder='" + purchOrder + "')?sap-client=400&$format=json";
     let url2 = "https://p2001172697trial-trial.apim1.hanatrial.ondemand.com:443/p2001172697trial/Workflow_approval/TaskCollection?sap-client=400&$format=json&$filter=Status%20eq%20%27READY%27";
@@ -164,8 +164,8 @@ router.post('/getDetails', (req, res) => {
             return console.log(err);
         }
 
-        reply.content = body.d.PurchaseOrderType_Text + ", <say-as interpret-as='spell-out>" + body.d.PurchaseOrder + "</say-as> has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
-            ". Supplier is " + body.d.SupplierName + ".\n and was created by " + body.d.CreatedByUser + ".";
+        reply.content = "<speak>" + body.d.PurchaseOrderType_Text + ", <say-as interpret-as='spell-out>" + body.d.PurchaseOrder + "</say-as> has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
+            ". Supplier is " + body.d.SupplierName + ".\n and was created by " + body.d.CreatedByUser + ". <speak>";
 
         sendToCai.replies.push(reply);
         sendToCai.conversation.memory = {
@@ -173,7 +173,7 @@ router.post('/getDetails', (req, res) => {
             "purchOrder": req.body.conversation.memory.purchOrder,
             "task_index": req.body.conversation.memory.task_index
         }
-        res.json(sendToCai);        
+        res.json(sendToCai);
     });
 
 });
