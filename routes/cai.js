@@ -180,13 +180,13 @@ router.post('/getDetails', (req, res) => {
         reply.content = header.PurchaseOrderType_Text + " <say-as interpret-as='spell-out'>" + header.PurchaseOrder + "</say-as> has a net amount of " + header.DocumentCurrency + " " + header.PurchaseOrderNetAmount +
             ". Supplier is " + header.SupplierName + " and was created by " + header.CreatedByUser + ".\n";
 
-        reply.content = reply.content + "It has " + item.results.length + "order items.\n"
+        reply.content = reply.content + "It has " + item.results.length + " order items.\n"
 
         let parseItems = (aItems) => {
             let itemsText = "";
             aItems.map(oItem => {
                 let t = "Purchase order item <say-as interpret-as='spell-out'>" + oItem.PurchaseOrderItem + "</say-as>, is Material <say-as interpret-as='spell-out'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
-                    ", with quantity of " + oItem.OrderQuantity + " and a net unit price of " + oItem.DocumentCurrency + " " + oItem.NetPriceAmount + ".\n";
+                    ", with quantity of " + oItem.OrderQuantity + ", and a net unit price of " + oItem.DocumentCurrency + " " + oItem.NetPriceAmount + ".\n";
 
                 itemsText = itemsText + t;
             })
