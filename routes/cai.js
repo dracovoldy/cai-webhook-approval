@@ -45,6 +45,7 @@ router.post('/', (req, res) => {
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
                     "instanceId": body.d.results[0].InstanceID,
+                    "purchOrder": body.d.results[0].TaskTitle.split("order ")[1].split(".")[0],
                     "task_index": 1
                 }
                 res.json(sendToCai);
@@ -67,6 +68,7 @@ router.post('/', (req, res) => {
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
                     "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
+                    "purchOrder": body.d.results[req.body.conversation.memory.task_index].TaskTitle.split("order ")[1].split(".")[0],
                     "task_index": req.body.conversation.memory.task_index + 1
                 }
                 res.json(sendToCai);
@@ -75,6 +77,7 @@ router.post('/', (req, res) => {
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
                     "instanceId": req.body.conversation.memory.instanceId,
+                    "purchOrder": req.body.conversation.memory.purchOrder,
                     "task_index": req.body.conversation.memory.task_index
                 }
                 res.json(sendToCai);
@@ -107,6 +110,7 @@ router.post('/', (req, res) => {
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
                     "instanceId": req.body.conversation.memory.instanceId,
+                    "purchOrder": req.body.conversation.memory.purchOrder,
                     "task_index": req.body.conversation.memory.task_index
                 }
                 res.json(sendToCai);
