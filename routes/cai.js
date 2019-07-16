@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
         'json': true
     }, (err, resp, body) => {
         if (resp.statusCode !== 200) {
-            
+
             reply.content = "I'm facing issues answering that, please try again in a while.";
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {}
@@ -130,7 +130,8 @@ router.post('/', (req, res) => {
 });
 
 router.post('/getDetails', (req, res) => {
-    let url = "https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/C_PURCHASEORDER_FS_SRV/C_PurchaseOrderFs(PurchaseOrder='4500000352')";
+    let purchOrder = req.body.conversation.memory.purchOrder;
+    let url = "https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/C_PURCHASEORDER_FS_SRV/C_PurchaseOrderFs(PurchaseOrder='" + purchOrder + "')?sap-client=400&$format=json";
     let url2 = "https://p2001172697trial-trial.apim1.hanatrial.ondemand.com:443/p2001172697trial/Workflow_approval/TaskCollection?sap-client=400&$format=json&$filter=Status%20eq%20%27READY%27";
 
     request.get(url, {
@@ -140,7 +141,26 @@ router.post('/getDetails', (req, res) => {
         },
         'json': true
     }, (err, resp, body) => {
-        res.json(body);
+        if (resp.statusCode !== 200) {
+
+            reply.content = "I'm facing issues answering that, please try again in a while.";
+            sendToCai.replies.push(reply);
+            sendToCai.conversation.memory = {}
+            res.json(sendToCai);
+
+            return console.log(err);
+        }
+
+        reply.content = body.d.PurchaseOrderType_Text + ", <say-as interpret-as='spell-out>" + body.d.PurchaseOrder + "</say-as> has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
+            ". Supplier is " + body.d.SupplierName + ".\n and was created by " + body.d.CreatedByUser + ".";
+
+        sendToCai.replies.push(reply);
+        sendToCai.conversation.memory = {
+            "instanceId": req.body.conversation.memory.instanceId,
+            "purchOrder": req.body.conversation.memory.purchOrder,
+            "task_index": req.body.conversation.memory.task_index
+        }
+        res.json(sendToCai);        
     });
 
 });
