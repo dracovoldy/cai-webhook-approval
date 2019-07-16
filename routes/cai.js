@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
         if (req.body.conversation.skill === "get_my_tasks") {
             if (body.d.results.length > 0) {
                 reply.content = "You have " + body.d.results.length + " pending tasks.\n" + body.d.results[0].TaskTitle + "." +
-                    "\nPlease say next to show next task or, take action or, ask for more details.";
+                    "\nYou can say next, take action or ask for more details.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
                     "instanceId": body.d.results[0].InstanceID,
@@ -64,7 +64,7 @@ router.post('/', (req, res) => {
         } else if (req.body.conversation.skill === "show_next_task") {
             if (body.d.results.length > 0 && req.body.conversation.memory.task_index < body.d.results.length) {
                 reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle + "." +
-                    "\nSay next to show next task or, take action or, ask for more details.";
+                    "\nYou can say next, take action or ask for more details.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
                     "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
@@ -166,7 +166,7 @@ router.post('/getDetails', (req, res) => {
             return console.log(err);
         }
 
-        reply.content = body.d.PurchaseOrderType_Text + " <say-as interpret-as='spell-out'>" + body.d.PurchaseOrder + "<say-as> has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
+        reply.content = body.d.PurchaseOrderType_Text + " <say-as interpret-as='spell-out'>" + body.d.PurchaseOrder + "</say-as> has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
             ". Supplier is " + body.d.SupplierName + " and was created by " + body.d.CreatedByUser + ".";
 
         sendToCai.replies.push(reply);
