@@ -164,7 +164,7 @@ router.post('/getDetails', (req, res) => {
             return console.log(err);
         }
 
-        reply.content = "<speak>" + body.d.PurchaseOrderType_Text + ", <say-as interpret-as='spell-out>" + body.d.PurchaseOrder + "</say-as> has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
+        reply.content = "<speak>" + body.d.PurchaseOrderType_Text + ", " + body.d.PurchaseOrder + " has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
             ". Supplier is " + body.d.SupplierName + ".\n and was created by " + body.d.CreatedByUser + ". <speak>";
 
         sendToCai.replies.push(reply);
