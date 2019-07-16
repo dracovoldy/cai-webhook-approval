@@ -64,7 +64,7 @@ router.post('/', (req, res) => {
         } else if (req.body.conversation.skill === "show_next_task") {
             if (body.d.results.length > 0 && req.body.conversation.memory.task_index < body.d.results.length) {
                 reply.content = body.d.results[req.body.conversation.memory.task_index].TaskTitle + "." +
-                    "\nPlease say next to show next task or, take action or, ask for more details.";
+                    "\nSay next to show next task or, take action or, ask for more details.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
                     "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
@@ -106,7 +106,7 @@ router.post('/', (req, res) => {
                 res.json(sendToCai);
             } else if (body.d.results.length > 0 && req.body.conversation.memory.task_index <= body.d.results.length) {
                 reply.content = body.d.results[req.body.conversation.memory.task_index - 1].TaskTitle + "." +
-                    "\nPlease say next to show next task or, take action or, ask for more details.";
+                    "\nSay next to show next task or, take action or, ask for more details.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
                     "instanceId": req.body.conversation.memory.instanceId,
@@ -138,9 +138,10 @@ router.post('/getDetails', (req, res) => {
     };
 
     let reply = {
-        outputSpeech: "SSML",
-        type: "text",
-        content: "Mock reply"
+        outputSpeech: {
+            type: "SSML",
+            ssml: ""
+        }
     };
 
     let purchOrder = req.body.conversation.memory.purchOrder;
@@ -156,7 +157,7 @@ router.post('/getDetails', (req, res) => {
     }, (err, resp, body) => {
         if (resp.statusCode !== 200) {
 
-            reply.content = "I'm facing issues answering that, please try again in a while.";
+            reply.outputSpeech.ssml = "I'm facing issues answering that, please try again in a while.";
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {}
             res.json(sendToCai);
@@ -164,8 +165,8 @@ router.post('/getDetails', (req, res) => {
             return console.log(err);
         }
 
-        reply.content = body.d.PurchaseOrderType_Text + ", <say-as interpret-as='spell-out'>" + body.d.PurchaseOrder + "<say-as>, has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
-            ". Supplier is " + body.d.SupplierName + ", and was created by " + body.d.CreatedByUser + ".";
+        reply.outputSpeech.ssml = "<speak>" +body.d.PurchaseOrderType_Text + ", <say-as interpret-as='spell-out'>" + body.d.PurchaseOrder + "<say-as>, has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
+            ". Supplier is " + body.d.SupplierName + ", and was created by " + body.d.CreatedByUser + ".</speak>";
 
         sendToCai.replies.push(reply);
         sendToCai.conversation.memory = {
