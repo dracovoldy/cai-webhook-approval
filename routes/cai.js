@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
             reply.content = "I'm facing issues answering that, please try again in a while.";
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {}
-            res.json(sendToCai);
+            res.send(sendToCai);
 
             return console.log(err);
         }
@@ -48,17 +48,17 @@ router.post('/', (req, res) => {
                     "purchOrder": body.d.results[0].TaskTitle.split("order ")[1].split(".")[0],
                     "task_index": 1
                 }
-                res.json(sendToCai);
+                res.send(sendToCai);
             } else if (body.d.results.length <= 0) {
                 reply.content = "You don't have any pending tasks.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {}
-                res.json(sendToCai);
+                res.send(sendToCai);
             } else {
                 reply.content = "I'm facing issues answering that, please try again in a while.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {}
-                res.json(sendToCai);
+                res.send(sendToCai);
             }
 
         } else if (req.body.conversation.skill === "show_next_task") {
@@ -71,7 +71,7 @@ router.post('/', (req, res) => {
                     "purchOrder": body.d.results[req.body.conversation.memory.task_index].TaskTitle.split("order ")[1].split(".")[0],
                     "task_index": req.body.conversation.memory.task_index + 1
                 }
-                res.json(sendToCai);
+                res.send(sendToCai);
             } else if (body.d.results.length > 0 && req.body.conversation.memory.task_index >= body.d.results.length) {
                 reply.content = "No more tasks to show.";
                 sendToCai.replies.push(reply);
@@ -80,22 +80,22 @@ router.post('/', (req, res) => {
                     "purchOrder": req.body.conversation.memory.purchOrder,
                     "task_index": req.body.conversation.memory.task_index
                 }
-                res.json(sendToCai);
+                res.send(sendToCai);
             } else if (body.d.results.length <= 0) {
                 reply.content = "You don't have any pending tasks.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {}
-                res.json(sendToCai);
+                res.send(sendToCai);
             } else if (req.body.conversation.memory.task_index === undefined) {
                 reply.content = "I can get you your pending tasks. Please say show my tasks to get your task list.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {}
-                res.json(sendToCai);
+                res.send(sendToCai);
             } else {
                 reply.content = "I'm facing issues answering that, please try again in a while.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {}
-                res.json(sendToCai);
+                res.send(sendToCai);
             }
 
         } else if (req.body.conversation.skill === "repeat_task") {
@@ -103,7 +103,7 @@ router.post('/', (req, res) => {
                 reply.content = "I can get you your pending tasks. Please say, show my tasks to get your task list.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {}
-                res.json(sendToCai);
+                res.send(sendToCai);
             } else if (body.d.results.length > 0 && req.body.conversation.memory.task_index <= body.d.results.length) {
                 reply.content = body.d.results[req.body.conversation.memory.task_index - 1].TaskTitle + "." +
                     "\nSay next to show next task or, take action or, ask for more details.";
@@ -113,17 +113,17 @@ router.post('/', (req, res) => {
                     "purchOrder": req.body.conversation.memory.purchOrder,
                     "task_index": req.body.conversation.memory.task_index
                 }
-                res.json(sendToCai);
+                res.send(sendToCai);
             } else if (body.d.results.length <= 0) {
                 reply.content = "You don't have any pending tasks.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {}
-                res.json(sendToCai);
+                res.send(sendToCai);
             } else {
                 reply.content = "I'm facing issues answering that, please try again in a while.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {}
-                res.json(sendToCai);
+                res.send(sendToCai);
             }
         }
     });
@@ -140,8 +140,9 @@ router.post('/getDetails', (req, res) => {
     let reply = {
         outputSpeech: {
             type: "SSML",
-            ssml: ""
-        }
+        },
+        type: "text",
+        content: "Mock reply"
     };
 
     let purchOrder = req.body.conversation.memory.purchOrder;
@@ -157,16 +158,16 @@ router.post('/getDetails', (req, res) => {
     }, (err, resp, body) => {
         if (resp.statusCode !== 200) {
 
-            reply.outputSpeech.ssml = "I'm facing issues answering that, please try again in a while.";
+            reply.content = "I'm facing issues answering that, please try again in a while.";
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {}
-            res.json(sendToCai);
+            res.send(sendToCai);
 
             return console.log(err);
         }
 
-        reply.outputSpeech.ssml = "<speak>" +body.d.PurchaseOrderType_Text + ", <say-as interpret-as='spell-out'>" + body.d.PurchaseOrder + "<say-as>, has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
-            ". Supplier is " + body.d.SupplierName + ", and was created by " + body.d.CreatedByUser + ".</speak>";
+        reply.content = body.d.PurchaseOrderType_Text + ", <say-as interpret-as='spell-out'>" + body.d.PurchaseOrder + "<say-as>, has a net amount of " + body.d.DocumentCurrency + " " + body.d.PurchaseOrderNetAmount +
+            ". Supplier is " + body.d.SupplierName + ", and was created by " + body.d.CreatedByUser + ".";
 
         sendToCai.replies.push(reply);
         sendToCai.conversation.memory = {
@@ -174,7 +175,7 @@ router.post('/getDetails', (req, res) => {
             "purchOrder": req.body.conversation.memory.purchOrder,
             "task_index": req.body.conversation.memory.task_index
         }
-        res.json(sendToCai);
+        res.send(sendToCai);
     });
 
 });
