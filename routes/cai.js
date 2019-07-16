@@ -130,6 +130,19 @@ router.post('/', (req, res) => {
 });
 
 router.post('/getDetails', (req, res) => {
+    let sendToCai = {
+        replies: [],
+        conversation: {
+            language: "en"
+        }
+    };
+
+    let reply = {
+        outputSpeech: "SSML",
+        type: "text",
+        content: "Mock reply"
+    };
+    
     let purchOrder = req.body.conversation.memory.purchOrder;
     let url = "https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/C_PURCHASEORDER_FS_SRV/C_PurchaseOrderFs(PurchaseOrder='" + purchOrder + "')?sap-client=400&$format=json";
     let url2 = "https://p2001172697trial-trial.apim1.hanatrial.ondemand.com:443/p2001172697trial/Workflow_approval/TaskCollection?sap-client=400&$format=json&$filter=Status%20eq%20%27READY%27";
