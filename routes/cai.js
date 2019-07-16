@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
 
             console.log(err);
            
-            process.exit(0);
+            return;
         }
 
         console.log(body);
