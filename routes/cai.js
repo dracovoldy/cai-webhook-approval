@@ -25,7 +25,8 @@ router.post('/', (req, res) => {
             'user': 'pritamsa',
             'pass': 'rupu@0801'
         },
-        'json': true
+        'json': true,
+        'timeout': 1200
     }, (err, resp, body) => {
         if (resp.statusCode !== 200) {
 
