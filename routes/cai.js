@@ -34,7 +34,7 @@ router.post('/', (req, res) => {
             sendToCai.conversation.memory = {}
             res.send(sendToCai);
 
-            return console.log(err);
+            return console.log(resp.statusCode);
         }
 
         console.log(body);
