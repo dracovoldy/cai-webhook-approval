@@ -250,7 +250,7 @@ router.post('/approveTask', (req, res) => {
 
     if (memory.last_skill === 'show_task_detail') {
         // Dialog for approval
-        reply.content = "Please say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as> ?";
+        reply.content = "Please say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as>.";
         sendToCai.replies.push(reply);
         sendToCai.conversation.memory = {
             "instanceId": req.body.conversation.memory.instanceId,
@@ -260,7 +260,7 @@ router.post('/approveTask', (req, res) => {
         }
         console.log(sendToCai);
         res.send(sendToCai);
-    } else if (skill_stack.pop() === 'get_my_tasks') {
+    } else if (memory.last_skill === 'get_my_tasks') {
         //Show details and dialog for approval
         let purchOrder = req.body.conversation.memory.purchOrder;
         let url = "C_PurchaseOrderFs(PurchaseOrder='" + purchOrder + "')?sap-client=400&$format=json";
@@ -313,7 +313,7 @@ router.post('/approveTask', (req, res) => {
                 return itemsText;
             };
 
-            reply.content = reply.content + parseItems(item.results) + "\nPlease say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as> ?";;
+            reply.content = reply.content + parseItems(item.results) + "\nPlease say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as>.";;
 
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {
