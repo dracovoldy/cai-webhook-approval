@@ -338,16 +338,98 @@ router.post('/approveTask', (req, res) => {
     } else if (memory.last_skill === 'approve_task' && (nlp.sentiment === "vpositive" || nlp.sentiment === "positive")) {
         //approve task
 
-        reply.content = "Ok, Approved!";
-        sendToCai.replies.push(reply);
-        sendToCai.conversation.memory = {
-            "instanceId": req.body.conversation.memory.instanceId,
-            "purchOrder": req.body.conversation.memory.purchOrder,
-            "task_index": req.body.conversation.memory.task_index,
-            "last_skill": "confirm_approve"
+        let instanceId = memory.instanceId;
+        let decisionKey = '0001';
+
+        var url = `Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='${decisionKey}'&Comments='approve-from-alexa'`;
+
+        let config1 = {
+            baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
+            auth: {
+                username: 'pritamsa',
+                password: 'rupu@0801'
+            },
+            timeout: 0, // default is `0` (no timeout)
+            headers: {
+                'x-csrf-token': 'Fetch',
+                'sap-contextid-accept': 'header'
+            }
         }
-        console.log(sendToCai);
-        res.send(sendToCai);
+
+
+
+        axios.head(url, config1)
+            .then((response) => {
+                let token = response.headers.x - csrf - token;
+                let config2 = {
+                    baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
+                    auth: {
+                        username: 'pritamsa',
+                        password: 'rupu@0801'
+                    },
+                    timeout: 0, // default is `0` (no timeout)
+                    headers: {
+                        'x-csrf-token': `${token}`,
+                        'sap-contextid-accept': 'header'
+                    }
+                }
+                axios.post(url, config2)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            // Success
+                            reply.content = "Ok, Approved!";
+                            sendToCai.replies.push(reply);
+                            sendToCai.conversation.memory = {
+                                "instanceId": req.body.conversation.memory.instanceId,
+                                "purchOrder": req.body.conversation.memory.purchOrder,
+                                "task_index": req.body.conversation.memory.task_index,
+                                "last_skill": "confirm-approve"
+                            }
+                            console.log(sendToCai);
+                            res.send(sendToCai);
+                        } else {
+                            //Error
+                            reply.content = "Sorry faced some issues while approving, please try again later.";
+                            sendToCai.replies.push(reply);
+                            sendToCai.conversation.memory = {
+                                "instanceId": req.body.conversation.memory.instanceId,
+                                "purchOrder": req.body.conversation.memory.purchOrder,
+                                "task_index": req.body.conversation.memory.task_index,
+                                "last_skill": "approve_task"
+                            }
+                            console.log(sendToCai);
+                            res.send(sendToCai);
+                        }
+                    })
+            })
+            .catch((error) => {
+                console.log(error);
+                //Error
+                reply.content = "Sorry faced some issues while approving, please try again later.";
+                sendToCai.replies.push(reply);
+                sendToCai.conversation.memory = {
+                    "instanceId": req.body.conversation.memory.instanceId,
+                    "purchOrder": req.body.conversation.memory.purchOrder,
+                    "task_index": req.body.conversation.memory.task_index,
+                    "last_skill": "approve_task"
+                }
+                console.log(sendToCai);
+                res.send(sendToCai);
+            })
+
+
+
+
+        // reply.content = "Ok, Approved!";
+        // sendToCai.replies.push(reply);
+        // sendToCai.conversation.memory = {
+        //     "instanceId": req.body.conversation.memory.instanceId,
+        //     "purchOrder": req.body.conversation.memory.purchOrder,
+        //     "task_index": req.body.conversation.memory.task_index,
+        //     "last_skill": "confirm_approve"
+        // }
+        // console.log(sendToCai);
+        // res.send(sendToCai);
     }
 
 
