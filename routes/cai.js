@@ -361,8 +361,10 @@ router.post('/approveTask', (req, res) => {
         axios.head(url, config1)
             .then((response) => {
                 let token = response.headers["x-csrf-token"];
-                console.log(`\n============================\n`);
+                console.log(`\n===============11=============\n`);
                 console.log(response.headers)
+                console.log(`\n==============22=============\n`);
+                console.log(token)
                 let config2 = {
                     baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
                     auth: {
@@ -408,7 +410,7 @@ router.post('/approveTask', (req, res) => {
                         }
                     })
                     .catch(error => {
-                        console.log(error.response.data);
+                        console.log(`\n==============33==========\n`);
                         console.log(error.response.status);
                         console.log(error.response.headers);
                         reply.content = "Sorry faced some issues while approving, please try again later.";
