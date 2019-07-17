@@ -405,8 +405,21 @@ router.post('/approveTask', (req, res) => {
                             res.send(sendToCai);
                         }
                     })
+                    .catch(error => {
+                        console.log(error);
+                        reply.content = "Sorry faced some issues while approving, please try again later.";
+                        sendToCai.replies.push(reply);
+                        sendToCai.conversation.memory = {
+                            "instanceId": req.body.conversation.memory.instanceId,
+                            "purchOrder": req.body.conversation.memory.purchOrder,
+                            "task_index": req.body.conversation.memory.task_index,
+                            "last_skill": "approve_task"
+                        }
+                        console.log(sendToCai);
+                        res.send(sendToCai);
+                    })
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
                 //Error
                 reply.content = "Sorry faced some issues while approving, please try again later.";
