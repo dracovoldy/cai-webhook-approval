@@ -335,10 +335,19 @@ router.post('/approveTask', (req, res) => {
             res.send(sendToCai);
         });
 
-    } else if (memory.last_skill === 'approve_task' && nlp.sentiment === "vpositive") {
+    } else if (memory.last_skill === 'approve_task' && (nlp.sentiment === "vpositive" || nlp.sentiment === "positive")) {
         //approve task
-    } else if (memory.last_skill === 'approve_task' && nlp.sentiment === "vnegative") {
-        //approve task
+
+        reply.content = "Ok, Approved!";
+        sendToCai.replies.push(reply);
+        sendToCai.conversation.memory = {
+            "instanceId": req.body.conversation.memory.instanceId,
+            "purchOrder": req.body.conversation.memory.purchOrder,
+            "task_index": req.body.conversation.memory.task_index,
+            "last_skill": "confirm_approve"
+        }
+        console.log(sendToCai);
+        res.send(sendToCai);
     }
 
 
