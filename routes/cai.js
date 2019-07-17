@@ -50,7 +50,8 @@ router.post('/', (req, res) => {
                 sendToCai.conversation.memory = {
                     "instanceId": body.d.results[0].InstanceID,
                     "purchOrder": body.d.results[0].TaskTitle.split("order ")[1].split(".")[0],
-                    "task_index": 1
+                    "task_index": 1,
+                    "last_skill": "get_my_tasks"
                 }
                 res.send(sendToCai);
             } else if (body.d.results.length <= 0) {
@@ -73,7 +74,8 @@ router.post('/', (req, res) => {
                 sendToCai.conversation.memory = {
                     "instanceId": body.d.results[req.body.conversation.memory.task_index].InstanceID,
                     "purchOrder": body.d.results[req.body.conversation.memory.task_index].TaskTitle.split("order ")[1].split(".")[0],
-                    "task_index": req.body.conversation.memory.task_index + 1
+                    "task_index": req.body.conversation.memory.task_index + 1,
+                    "last_skill": "get_my_tasks"
                 }
                 res.send(sendToCai);
             } else if (body.d.results.length > 0 && req.body.conversation.memory.task_index >= body.d.results.length) {
@@ -82,7 +84,8 @@ router.post('/', (req, res) => {
                 sendToCai.conversation.memory = {
                     "instanceId": req.body.conversation.memory.instanceId,
                     "purchOrder": req.body.conversation.memory.purchOrder,
-                    "task_index": req.body.conversation.memory.task_index
+                    "task_index": req.body.conversation.memory.task_index,
+                    "last_skill": "get_my_tasks"
                 }
                 res.send(sendToCai);
             } else if (body.d.results.length <= 0) {
@@ -115,7 +118,8 @@ router.post('/', (req, res) => {
                 sendToCai.conversation.memory = {
                     "instanceId": req.body.conversation.memory.instanceId,
                     "purchOrder": req.body.conversation.memory.purchOrder,
-                    "task_index": req.body.conversation.memory.task_index
+                    "task_index": req.body.conversation.memory.task_index,
+                    "last_skill": "get_my_tasks"
                 }
                 res.send(sendToCai);
             } else if (body.d.results.length <= 0) {
