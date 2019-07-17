@@ -373,8 +373,11 @@ router.post('/approveTask', (req, res) => {
                         'sap-contextid-accept': 'header'
                     }
                 }
+
+                console.log(response.headers);
                 axios.post(url, config2)
                     .then((response) => {
+                        console.log(response.headers);
                         if (response.status === 200) {
                             // Success
                             reply.content = "Ok, Approved!";
