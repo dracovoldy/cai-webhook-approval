@@ -406,7 +406,9 @@ router.post('/approveTask', (req, res) => {
                         }
                     })
                     .catch(error => {
-                        console.log(error);
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
                         reply.content = "Sorry faced some issues while approving, please try again later.";
                         sendToCai.replies.push(reply);
                         sendToCai.conversation.memory = {
