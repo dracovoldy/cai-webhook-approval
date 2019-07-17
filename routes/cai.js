@@ -188,7 +188,7 @@ router.post('/getDetails', (req, res) => {
         let header = response1.data.d;
         let item = response2.data.d;
 
-        reply.content = header.PurchaseOrderType_Text + " <say-as interpret-as='spell-out'>" + header.PurchaseOrder + "</say-as> has a net amount of " + header.DocumentCurrency + " " + header.PurchaseOrderNetAmount +
+        reply.content = header.PurchaseOrderType_Text + " <say-as interpret-as='digits'>" + header.PurchaseOrder + "</say-as> has a net amount of " + header.DocumentCurrency + " " + header.PurchaseOrderNetAmount +
             ". Supplier is " + header.SupplierName + " and was created by " + header.CreatedByUser + ".\n";
 
         reply.content = reply.content + "It has " + item.results.length + " order items.\n"
@@ -196,7 +196,7 @@ router.post('/getDetails', (req, res) => {
         let parseItems = (aItems) => {
             let itemsText = "";
             aItems.map(oItem => {
-                let t = "Purchase order item <say-as interpret-as='spell-out'>" + oItem.PurchaseOrderItem + "</say-as>, is Material <say-as interpret-as='spell-out'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
+                let t = "Purchase order item <say-as interpret-as='digits'>" + parseInt(oItem.PurchaseOrderItem.substring(0, oItem.PurchaseOrderItem.length-1)) + "</say-as>, is Material <say-as interpret-as='digits'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
                     ", with quantity of " + oItem.OrderQuantity + ", and a net unit price of " + oItem.DocumentCurrency + " " + oItem.NetPriceAmount + ".\n";
 
                 itemsText = itemsText + t;
@@ -250,7 +250,7 @@ router.post('/approveTask', (req, res) => {
 
     if (memory.last_skill === 'show_task_detail') {
         // Dialog for approval
-        reply.content = "Please say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as>.";
+        reply.content = "Please say yes to approve Purchase Order: <say-as interpret-as='digits'>" + memory.purchOrder + "</say-as>.";
         sendToCai.replies.push(reply);
         sendToCai.conversation.memory = {
             "instanceId": req.body.conversation.memory.instanceId,
@@ -297,7 +297,7 @@ router.post('/approveTask', (req, res) => {
             let header = response1.data.d;
             let item = response2.data.d;
 
-            reply.content = header.PurchaseOrderType_Text + " <say-as interpret-as='spell-out'>" + header.PurchaseOrder + "</say-as> has a net amount of " + header.DocumentCurrency + " " + header.PurchaseOrderNetAmount +
+            reply.content = header.PurchaseOrderType_Text + " <say-as interpret-as='digits'>" + header.PurchaseOrder + "</say-as> has a net amount of " + header.DocumentCurrency + " " + header.PurchaseOrderNetAmount +
                 ". Supplier is " + header.SupplierName + " and was created by " + header.CreatedByUser + ".\n";
 
             reply.content = reply.content + "It has " + item.results.length + " order items.\n"
@@ -305,7 +305,7 @@ router.post('/approveTask', (req, res) => {
             let parseItems = (aItems) => {
                 let itemsText = "";
                 aItems.map(oItem => {
-                    let t = "Purchase order item <say-as interpret-as='spell-out'>" + oItem.PurchaseOrderItem + "</say-as>, is Material <say-as interpret-as='spell-out'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
+                    let t = "Purchase order item <say-as interpret-as='digits'>" + parseInt(oItem.PurchaseOrderItem.substring(0, oItem.PurchaseOrderItem.length-1)) + "</say-as>, is Material <say-as interpret-as='spell-out'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
                         ", with quantity of " + oItem.OrderQuantity + ", and a net unit price of " + oItem.DocumentCurrency + " " + oItem.NetPriceAmount + ".\n";
 
                     itemsText = itemsText + t;
@@ -313,7 +313,7 @@ router.post('/approveTask', (req, res) => {
                 return itemsText;
             };
 
-            reply.content = reply.content + parseItems(item.results) + "\nPlease say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as>.";;
+            reply.content = reply.content + parseItems(item.results) + "\nPlease say yes to approve Purchase Order: <say-as interpret-as='digits'>" + memory.purchOrder + "</say-as>.";;
 
             sendToCai.replies.push(reply);
             sendToCai.conversation.memory = {
