@@ -375,13 +375,11 @@ router.post('/approveTask', (req, res) => {
                         'x-csrf-token': token,
                         'sap-contextid-accept': 'header'
                     }
-                }
-
-                console.log(response.headers);
+                }                
 
                 axios.post(url, config2)
                     .then((response) => {
-                        console.log(response.headers);
+                       
                         if (response.status === 200) {
                             // Success
                             reply.content = "Ok, Approved!";
@@ -412,7 +410,7 @@ router.post('/approveTask', (req, res) => {
                         console.log(`\n==============33==========\n`);
                         console.log(error);
 
-                        reply.content = "Sorry faced some issues while approving, please try again later.";
+                        reply.content = "Sorry faced some issues while approving, please try again later 2.";
                         sendToCai.replies.push(reply);
                         sendToCai.conversation.memory = {
                             "instanceId": req.body.conversation.memory.instanceId,
@@ -427,7 +425,7 @@ router.post('/approveTask', (req, res) => {
             .catch((error) => {
                 console.log(error);
                 //Error
-                reply.content = "Sorry faced some issues while approving, please try again later.";
+                reply.content = "Sorry faced some issues while approving, please try again later 1.";
                 sendToCai.replies.push(reply);
                 sendToCai.conversation.memory = {
                     "instanceId": req.body.conversation.memory.instanceId,
