@@ -240,6 +240,9 @@ router.post('/approveTask', (req, res) => {
     let skill_stack = req.body.conversation.skill_stack;
     let skill_occurences = req.body.conversation.skill_occurences;
 
+    console.log(req.body.conversation);
+    
+
     if (skill_stack.pop() === 'show_task_detail') {
         // Dialog for approval
         reply.content = "Please say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as> ?";
@@ -250,6 +253,7 @@ router.post('/approveTask', (req, res) => {
             "task_index": req.body.conversation.memory.task_index,
             "dialog": true
         }
+        console.log(sendToCai);
         res.send(sendToCai);
     } else if (skill_stack.pop() === 'get_my_tasks') {
         //Show details and dialog for approval
@@ -261,8 +265,11 @@ router.post('/approveTask', (req, res) => {
             "task_index": req.body.conversation.memory.task_index,
             "dialog": true
         }
+        console.log(sendToCai);
         res.send(sendToCai);
     }
+
+    
 
 });
 
