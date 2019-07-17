@@ -196,7 +196,7 @@ router.post('/getDetails', (req, res) => {
         let parseItems = (aItems) => {
             let itemsText = "";
             aItems.map(oItem => {
-                let t = "Purchase order item <say-as interpret-as='digits'>" + parseInt(oItem.PurchaseOrderItem.substring(0, oItem.PurchaseOrderItem.length-1)) + "</say-as>, is Material <say-as interpret-as='digits'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
+                let t = "Purchase order item <say-as interpret-as='digits'>" + parseInt(oItem.PurchaseOrderItem.substring(0, oItem.PurchaseOrderItem.length - 1)) + "</say-as>, is Material <say-as interpret-as='digits'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
                     ", with quantity of " + oItem.OrderQuantity + ", and a net unit price of " + oItem.DocumentCurrency + " " + oItem.NetPriceAmount + ".\n";
 
                 itemsText = itemsText + t;
@@ -243,6 +243,7 @@ router.post('/approveTask', (req, res) => {
         content: "Mock reply"
     };
     let memory = req.body.conversation.memory;
+    let nlp = req.body.nlp;
 
 
     console.log(req.body.conversation);
@@ -305,7 +306,7 @@ router.post('/approveTask', (req, res) => {
             let parseItems = (aItems) => {
                 let itemsText = "";
                 aItems.map(oItem => {
-                    let t = "Purchase order item <say-as interpret-as='digits'>" + parseInt(oItem.PurchaseOrderItem.substring(0, oItem.PurchaseOrderItem.length-1)) + "</say-as>, is Material <say-as interpret-as='spell-out'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
+                    let t = "Purchase order item <say-as interpret-as='digits'>" + parseInt(oItem.PurchaseOrderItem.substring(0, oItem.PurchaseOrderItem.length - 1)) + "</say-as>, is Material <say-as interpret-as='spell-out'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
                         ", with quantity of " + oItem.OrderQuantity + ", and a net unit price of " + oItem.DocumentCurrency + " " + oItem.NetPriceAmount + ".\n";
 
                     itemsText = itemsText + t;
@@ -334,6 +335,10 @@ router.post('/approveTask', (req, res) => {
             res.send(sendToCai);
         });
 
+    } else if (memory.last_skill === 'approve_task' && nlp.sentiment === "vpositive") {
+        //approve task
+    } else if (memory.last_skill === 'approve_task' && nlp.sentiment === "vnegative") {
+        //approve task
     }
 
 
