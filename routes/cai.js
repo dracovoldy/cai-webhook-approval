@@ -338,7 +338,7 @@ router.post('/approveTask', (req, res) => {
     } else if (memory.last_skill === 'approve_task' && (nlp.sentiment === "vpositive" || nlp.sentiment === "positive")) {
         //approve task
 
-        let instanceId = memory.instanceId;        
+        let instanceId = memory.instanceId;
 
         var url2 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve-from-alexa'`;
         // var url1 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/`;
@@ -362,47 +362,35 @@ router.post('/approveTask', (req, res) => {
                 console.log(response.headers)
                 console.log(`\n==========TOKEN===========\n`);
                 console.log(token)
-                let config2 = {                    
+                let config2 = {
                     auth: {
                         username: 'pritamsa',
                         password: 'rupu@0801'
                     },
-                    timeout: 0, 
+                    timeout: 0,
                     headers: {
                         'x-csrf-token': token,
                         'sap-contextid-accept': 'header'
                     },
-                    data: {}
-                }                
+                    data: {},
+                    withCredentials: true,
+                }
 
                 axios.post(url2, config2)
                     .then((response) => {
-                       
-                        if (response.status === 200) {
-                            // Success
-                            reply.content = "Ok, Approved!";
-                            sendToCai.replies.push(reply);
-                            sendToCai.conversation.memory = {
-                                "instanceId": req.body.conversation.memory.instanceId,
-                                "purchOrder": req.body.conversation.memory.purchOrder,
-                                "task_index": req.body.conversation.memory.task_index,
-                                "last_skill": "confirm-approve"
-                            }
-                            
-                            res.send(sendToCai);
-                        } else {
-                            //Error
-                            reply.content = "Sorry faced some issues while approving, please try again later.";
-                            sendToCai.replies.push(reply);
-                            sendToCai.conversation.memory = {
-                                "instanceId": req.body.conversation.memory.instanceId,
-                                "purchOrder": req.body.conversation.memory.purchOrder,
-                                "task_index": req.body.conversation.memory.task_index,
-                                "last_skill": "approve_task"
-                            }
-                            
-                            res.send(sendToCai);
+
+                        // Success
+                        reply.content = "Ok, Approved!";
+                        sendToCai.replies.push(reply);
+                        sendToCai.conversation.memory = {
+                            "instanceId": req.body.conversation.memory.instanceId,
+                            "purchOrder": req.body.conversation.memory.purchOrder,
+                            "task_index": req.body.conversation.memory.task_index,
+                            "last_skill": "confirm-approve"
                         }
+
+                        res.send(sendToCai);
+
                     })
                     .catch((error) => {
                         console.log(`\n==========ERROR========\n`);
@@ -416,7 +404,7 @@ router.post('/approveTask', (req, res) => {
                             "task_index": req.body.conversation.memory.task_index,
                             "last_skill": "approve_task"
                         }
-                        
+
                         res.send(sendToCai);
                     })
             })
@@ -432,7 +420,7 @@ router.post('/approveTask', (req, res) => {
                     "last_skill": "approve_task"
                 }
                 res.send(sendToCai);
-                
+
             })
 
 
