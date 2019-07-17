@@ -375,6 +375,7 @@ router.post('/approveTask', (req, res) => {
                 }
 
                 console.log(response.headers);
+                
                 axios.post(url, config2)
                     .then((response) => {
                         console.log(response.headers);
