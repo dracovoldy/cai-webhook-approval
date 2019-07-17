@@ -206,8 +206,10 @@ router.post('/getDetails', (req, res) => {
         sendToCai.conversation.memory = {
             "instanceId": req.body.conversation.memory.instanceId,
             "purchOrder": req.body.conversation.memory.purchOrder,
-            "task_index": req.body.conversation.memory.task_index
+            "task_index": req.body.conversation.memory.task_index,
+            "last_skill": "show_task_detail"
         }
+
         res.send(sendToCai);
 
     })).catch(error => {
@@ -237,13 +239,12 @@ router.post('/approveTask', (req, res) => {
         content: "Mock reply"
     };
     let memory = req.body.conversation.memory;
-    let skill_stack = req.body.conversation.skill_stack;
-    let skill_occurences = req.body.conversation.skill_occurences;
+
 
     console.log(req.body.conversation);
-    
 
-    if (skill_stack.pop() === 'show_task_detail') {
+
+    if (memory.last_skill === 'show_task_detail') {
         // Dialog for approval
         reply.content = "Please say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as> ?";
         sendToCai.replies.push(reply);
@@ -251,25 +252,87 @@ router.post('/approveTask', (req, res) => {
             "instanceId": req.body.conversation.memory.instanceId,
             "purchOrder": req.body.conversation.memory.purchOrder,
             "task_index": req.body.conversation.memory.task_index,
-            "dialog": true
+            "last_skill": "approve_task"
         }
         console.log(sendToCai);
         res.send(sendToCai);
     } else if (skill_stack.pop() === 'get_my_tasks') {
         //Show details and dialog for approval
-        reply.content = "Please say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as> ?";
-        sendToCai.replies.push(reply);
-        sendToCai.conversation.memory = {
-            "instanceId": req.body.conversation.memory.instanceId,
-            "purchOrder": req.body.conversation.memory.purchOrder,
-            "task_index": req.body.conversation.memory.task_index,
-            "dialog": true
+        let purchOrder = req.body.conversation.memory.purchOrder;
+        let url = "C_PurchaseOrderFs(PurchaseOrder='" + purchOrder + "')?sap-client=400&$format=json";
+        let url2 = "C_PurchaseOrderFs(PurchaseOrder='" + purchOrder + "')/to_PurchaseOrderItem?sap-client=400&$format=json";
+
+        let config = {
+            // `baseURL` will be prepended to `url` unless `url` is absolute.
+            // It can be convenient to set `baseURL` for an instance of axios to pass relative URLs
+            // to methods of that instance.
+            baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/C_PURCHASEORDER_FS_SRV/',
+
+            // `auth` indicates that HTTP Basic auth should be used, and supplies credentials.
+            // This will set an `Authorization` header, overwriting any existing
+            // `Authorization` custom headers you have set using `headers`.
+            // Please note that only HTTP Basic auth is configurable through this parameter.
+            // For Bearer tokens and such, use `Authorization` custom headers instead.
+            auth: {
+                username: 'pritamsa',
+                password: 'rupu@0801'
+            },
+
+            // `timeout` specifies the number of milliseconds before the request times out.
+            // If the request takes longer than `timeout`, the request will be aborted.
+            timeout: 0 // default is `0` (no timeout)
         }
-        console.log(sendToCai);
-        res.send(sendToCai);
+
+        axios.all([
+            axios.get(url, config),
+            axios.get(url2, config)
+        ]).then(axios.spread((response1, response2) => {
+            console.log(response1.data);
+            console.log(response2.data);
+
+            let header = response1.data.d;
+            let item = response2.data.d;
+
+            reply.content = header.PurchaseOrderType_Text + " <say-as interpret-as='spell-out'>" + header.PurchaseOrder + "</say-as> has a net amount of " + header.DocumentCurrency + " " + header.PurchaseOrderNetAmount +
+                ". Supplier is " + header.SupplierName + " and was created by " + header.CreatedByUser + ".\n";
+
+            reply.content = reply.content + "It has " + item.results.length + " order items.\n"
+
+            let parseItems = (aItems) => {
+                let itemsText = "";
+                aItems.map(oItem => {
+                    let t = "Purchase order item <say-as interpret-as='spell-out'>" + oItem.PurchaseOrderItem + "</say-as>, is Material <say-as interpret-as='spell-out'>" + oItem.Material + "</say-as> " + oItem.PurchaseOrderItemText +
+                        ", with quantity of " + oItem.OrderQuantity + ", and a net unit price of " + oItem.DocumentCurrency + " " + oItem.NetPriceAmount + ".\n";
+
+                    itemsText = itemsText + t;
+                })
+                return itemsText;
+            };
+
+            reply.content = reply.content + parseItems(item.results) + "\nPlease say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as> ?";;
+
+            sendToCai.replies.push(reply);
+            sendToCai.conversation.memory = {
+                "instanceId": req.body.conversation.memory.instanceId,
+                "purchOrder": req.body.conversation.memory.purchOrder,
+                "task_index": req.body.conversation.memory.task_index,
+                "last_skill": "approve_task"
+            }
+
+            res.send(sendToCai);
+
+        })).catch(error => {
+            console.log(error);
+
+            reply.content = "I'm facing issues answering that, please try again in a while.";
+            sendToCai.replies.push(reply);
+            sendToCai.conversation.memory = {}
+            res.send(sendToCai);
+        });
+
     }
 
-    
+
 
 });
 
