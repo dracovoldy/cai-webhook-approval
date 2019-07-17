@@ -242,7 +242,7 @@ router.post('/approveTask', (req, res) => {
 
     if (skill_stack.pop() === 'show_task_detail') {
         // Dialog for approval
-        reply.content = "Please say yes to approve Purchase Order: " + memory.purchOrder + " ?";
+        reply.content = "Please say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as> ?";
         sendToCai.replies.push(reply);
         sendToCai.conversation.memory = {
             "instanceId": req.body.conversation.memory.instanceId,
@@ -253,7 +253,7 @@ router.post('/approveTask', (req, res) => {
         res.send(sendToCai);
     } else if (skill_stack.pop() === 'get_my_tasks') {
         //Show details and dialog for approval
-        reply.content = "Please say yes to approve Purchase Order: " + memory.purchOrder + " ?";
+        reply.content = "Please say yes to approve Purchase Order: <say-as interpret-as='spell-out'>" + memory.purchOrder + "</say-as> ?";
         sendToCai.replies.push(reply);
         sendToCai.conversation.memory = {
             "instanceId": req.body.conversation.memory.instanceId,
