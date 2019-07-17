@@ -341,7 +341,7 @@ router.post('/approveTask', (req, res) => {
         let instanceId = memory.instanceId;        
 
         var url2 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve-from-alexa'`;
-        var url1 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/`;
+        // var url1 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/`;
 
         let config1 = {
             auth: {
@@ -355,7 +355,7 @@ router.post('/approveTask', (req, res) => {
             }
         }
 
-        axios.head(url1, config1)
+        axios.head(url2, config1)
             .then((response) => {
                 let token = response.headers["x-csrf-token"];
                 console.log(`\n=============HEADERS===========\n`);
@@ -371,7 +371,8 @@ router.post('/approveTask', (req, res) => {
                     headers: {
                         'x-csrf-token': token,
                         'sap-contextid-accept': 'header'
-                    }
+                    },
+                    data: {}
                 }                
 
                 axios.post(url2, config2)
@@ -430,7 +431,7 @@ router.post('/approveTask', (req, res) => {
                     "task_index": req.body.conversation.memory.task_index,
                     "last_skill": "approve_task"
                 }
-                console.log(sendToCai);
+                res.send(sendToCai);
                 
             })
 
