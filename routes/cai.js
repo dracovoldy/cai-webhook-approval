@@ -338,10 +338,9 @@ router.post('/approveTask', (req, res) => {
     } else if (memory.last_skill === 'approve_task' && (nlp.sentiment === "vpositive" || nlp.sentiment === "positive")) {
         //approve task
 
-        let instanceId = memory.instanceId;
-        let decisionKey = '0001';
+        let instanceId = memory.instanceId;        
 
-        var url = `Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='${decisionKey}'&Comments='approve-from-alexa'`;
+        var url = `Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve-from-alexa'`;
 
         let config1 = {
             baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
@@ -412,7 +411,7 @@ router.post('/approveTask', (req, res) => {
                     .catch((error) => {
                         console.log(`\n==============33==========\n`);
                         console.log(error);
-                        
+
                         reply.content = "Sorry faced some issues while approving, please try again later.";
                         sendToCai.replies.push(reply);
                         sendToCai.conversation.memory = {
