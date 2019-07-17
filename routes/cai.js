@@ -221,4 +221,49 @@ router.post('/getDetails', (req, res) => {
 
 });
 
+router.post('/approveTask', (req, res) => {
+    let sendToCai = {
+        replies: [],
+        conversation: {
+            language: "en"
+        }
+    };
+
+    let reply = {
+        outputSpeech: {
+            type: "SSML",
+        },
+        type: "text",
+        content: "Mock reply"
+    };
+    let memory = req.body.conversation.memory;
+    let skill_stack = req.body.conversation.skill_stack;
+    let skill_occurences = req.body.conversation.skill_occurences;
+
+    if (skill_stack.pop() === 'show_task_detail') {
+        // Dialog for approval
+        reply.content = "Please say yes to approve Purchase Order: " + memory.purchOrder + " ?";
+        sendToCai.replies.push(reply);
+        sendToCai.conversation.memory = {
+            "instanceId": req.body.conversation.memory.instanceId,
+            "purchOrder": req.body.conversation.memory.purchOrder,
+            "task_index": req.body.conversation.memory.task_index,
+            "dialog": true
+        }
+        res.send(sendToCai);
+    } else if (skill_stack.pop() === 'get_my_tasks') {
+        //Show details and dialog for approval
+        reply.content = "Please say yes to approve Purchase Order: " + memory.purchOrder + " ?";
+        sendToCai.replies.push(reply);
+        sendToCai.conversation.memory = {
+            "instanceId": req.body.conversation.memory.instanceId,
+            "purchOrder": req.body.conversation.memory.purchOrder,
+            "task_index": req.body.conversation.memory.task_index,
+            "dialog": true
+        }
+        res.send(sendToCai);
+    }
+
+});
+
 module.exports = router;
