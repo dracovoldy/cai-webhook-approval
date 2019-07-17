@@ -370,10 +370,10 @@ router.post('/approveTask', (req, res) => {
                     timeout: 0,
                     headers: {
                         'x-csrf-token': token,
-                        'sap-contextid-accept': 'header'
+                        'sap-contextid-accept': 'header',
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    data: {},
-                    withCredentials: true,
+                    data: {}
                 }
 
                 axios.post(url2, config2)
