@@ -340,7 +340,7 @@ router.post('/approveTask', (req, res) => {
 
         let instanceId = memory.instanceId;        
 
-        var url = `Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve-from-alexa'`;
+        var url = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve-from-alexa'`;
 
         let config1 = {
             baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
@@ -357,15 +357,14 @@ router.post('/approveTask', (req, res) => {
 
 
 
-        axios.head(url, config1)
+        axios.head("/", config1)
             .then((response) => {
                 let token = response.headers["x-csrf-token"];
-                console.log(`\n===============11=============\n`);
+                console.log(`\n=============HEADERS===========\n`);
                 console.log(response.headers)
-                console.log(`\n==============22=============\n`);
+                console.log(`\n==========TOKEN===========\n`);
                 console.log(token)
-                let config2 = {
-                    baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
+                let config2 = {                    
                     auth: {
                         username: 'pritamsa',
                         password: 'rupu@0801'
@@ -407,7 +406,7 @@ router.post('/approveTask', (req, res) => {
                         }
                     })
                     .catch((error) => {
-                        console.log(`\n==============33==========\n`);
+                        console.log(`\n==========ERROR========\n`);
                         console.log(error);
 
                         reply.content = "Sorry faced some issues while approving, please try again later 2.";
