@@ -390,7 +390,7 @@ router.post('/approveTask', (req, res) => {
                                 "task_index": req.body.conversation.memory.task_index,
                                 "last_skill": "confirm-approve"
                             }
-                            console.log(sendToCai);
+                            
                             res.send(sendToCai);
                         } else {
                             //Error
@@ -402,7 +402,7 @@ router.post('/approveTask', (req, res) => {
                                 "task_index": req.body.conversation.memory.task_index,
                                 "last_skill": "approve_task"
                             }
-                            console.log(sendToCai);
+                            
                             res.send(sendToCai);
                         }
                     })
@@ -418,7 +418,7 @@ router.post('/approveTask', (req, res) => {
                             "task_index": req.body.conversation.memory.task_index,
                             "last_skill": "approve_task"
                         }
-                        console.log(sendToCai);
+                        
                         res.send(sendToCai);
                     })
             })
@@ -434,7 +434,7 @@ router.post('/approveTask', (req, res) => {
                     "last_skill": "approve_task"
                 }
                 console.log(sendToCai);
-                res.send(sendToCai);
+                
             })
 
 
