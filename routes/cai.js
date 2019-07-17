@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
             'pass': 'rupu@0801'
         },
         'json': true,
-        'timeout': 1000
+        'timeout': 1500
     }, (err, resp, body) => {
         if (err) {
 
@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
             res.send(sendToCai);
 
             console.log(err);
-           
+
             return;
         }
 
@@ -167,7 +167,11 @@ router.post('/getDetails', (req, res) => {
         auth: {
             username: 'pritamsa',
             password: 'rupu@0801'
-        }
+        },
+
+        // `timeout` specifies the number of milliseconds before the request times out.
+        // If the request takes longer than `timeout`, the request will be aborted.
+        timeout: 1500 // default is `0` (no timeout)
     }
 
     axios.all([
