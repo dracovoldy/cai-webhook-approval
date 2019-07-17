@@ -361,6 +361,8 @@ router.post('/approveTask', (req, res) => {
         axios.head(url, config1)
             .then((response) => {
                 let token = response.headers["x-csrf-token"];
+                console.log(`\n============================\n`);
+                console.log(response.headers)
                 let config2 = {
                     baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
                     auth: {
@@ -369,7 +371,7 @@ router.post('/approveTask', (req, res) => {
                     },
                     timeout: 0, // default is `0` (no timeout)
                     headers: {
-                        'x-csrf-token': `${token}`,
+                        'x-csrf-token': token,
                         'sap-contextid-accept': 'header'
                     }
                 }
