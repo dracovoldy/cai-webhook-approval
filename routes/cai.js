@@ -340,10 +340,10 @@ router.post('/approveTask', (req, res) => {
 
         let instanceId = memory.instanceId;        
 
-        var url = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve-from-alexa'`;
+        var url2 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve-from-alexa'`;
+        var url1 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/`;
 
         let config1 = {
-            baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
             auth: {
                 username: 'pritamsa',
                 password: 'rupu@0801'
@@ -355,9 +355,7 @@ router.post('/approveTask', (req, res) => {
             }
         }
 
-
-
-        axios.head("/", config1)
+        axios.head(url1, config1)
             .then((response) => {
                 let token = response.headers["x-csrf-token"];
                 console.log(`\n=============HEADERS===========\n`);
@@ -369,14 +367,14 @@ router.post('/approveTask', (req, res) => {
                         username: 'pritamsa',
                         password: 'rupu@0801'
                     },
-                    timeout: 0, // default is `0` (no timeout)
+                    timeout: 0, 
                     headers: {
                         'x-csrf-token': token,
                         'sap-contextid-accept': 'header'
                     }
                 }                
 
-                axios.post(url, config2)
+                axios.post(url2, config2)
                     .then((response) => {
                        
                         if (response.status === 200) {
