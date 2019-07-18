@@ -341,7 +341,7 @@ router.post('/approveTask', (req, res) => {
         let instanceId = memory.instanceId;
 
         var url2 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve_from_alexa'`;
-        
+        // var url1 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/`;
 
         let config1 = {
             auth: {
@@ -364,10 +364,10 @@ router.post('/approveTask', (req, res) => {
                 console.log(`\n==========TOKEN===========\n`);
                 console.log(token)
 
-                let cookie_value = "";
-                response.headers["set-cookie"].map((value => {
-                    cookie_value = cookie_value + value;
-                }));
+                // let cookie_value = "";
+                // response.headers["set-cookie"].map((value => {
+                //     cookie_value = cookie_value + value;
+                // }));
 
                 let config2 = {
                     // `url` is the server URL that will be used for the request
@@ -381,12 +381,15 @@ router.post('/approveTask', (req, res) => {
                         password: 'rupu@0801'
                     },
                     timeout: 0,
-                    headers: {
+                    headers: {                        
+                        "sap-contextid-accept": 'header',
+                        "Access-Control-Allow-Credentials": true,
+                        "Access-Control-Allow-Origin": "*",                        
                     },
                     withCredentials: true
                 }
-                config2.headers["X-CSRF-Token"] = response.headers["x-csrf-token"];
-                // config2.headers["Cookie"] = cookie_value;
+                config2.headers["X-CSRF-Token"] = response.headers["x-csrf-token"];              
+                config2.headers["Cookie"] = response.headers["set-cookie"].map(c=>c.substr(0, c.indexOf(";"))).reduce((a, b) => a + "; " + b);
 
                 axios.request(url2, config2)
                     .then((response) => {

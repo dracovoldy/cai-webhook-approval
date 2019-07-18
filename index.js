@@ -11,12 +11,12 @@ const cai = require('./routes/cai');
 
 
 const app = express();
+
+app.use(cors({ credentials: true }));
 app.use(bodyParser.json());  
 app.use(helmet());
-app.use(cors({ credentials: true }));
-app.use(express.static('public'));
 app.use(morgan('tiny'));
-app.use(favicon(__dirname + '/static/favicon.ico'));
+
 
 //use - routes
 app.post('/errors', function(req, res) {
