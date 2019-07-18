@@ -352,7 +352,8 @@ router.post('/approveTask', (req, res) => {
             headers: {
                 'x-csrf-token': 'Fetch',
                 'sap-contextid-accept': 'header'
-            }
+            },
+            withCredentials: true
         }
 
         axios.head(url2, config1)
