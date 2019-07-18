@@ -340,7 +340,7 @@ router.post('/approveTask', (req, res) => {
 
         let instanceId = memory.instanceId;
 
-        var url2 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve-from-alexa'`;
+        var url2 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve_from_alexa'`;
         // var url1 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/`;
 
         let config1 = {
@@ -363,20 +363,27 @@ router.post('/approveTask', (req, res) => {
                 console.log(`\n==========TOKEN===========\n`);
                 console.log(token)
                 let config2 = {
+                    // `url` is the server URL that will be used for the request
+                    url: `Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve_from_alexa'`,
+
+                    // `method` is the request method to be used when making the request
+                    method: 'post', // default
+                    baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
                     auth: {
                         username: 'pritamsa',
                         password: 'rupu@0801'
                     },
                     timeout: 0,
                     headers: {
-                        'x-csrf-token': token,
-                        'sap-contextid-accept': 'header',
-                        'Content-Type': 'application/x-www-form-urlencoded'
+                        "x-csrf-token": token,
+                        "sap-contextid-accept": 'header',
+                        "Access-Control-Allow-Credentials": true,
+                        "Access-Control-Allow-Origin": "*"
                     },
-                    data: {}
+                    withCredentials: true
                 }
 
-                axios.post(url2, config2)
+                axios.request(url2, config2)
                     .then((response) => {
 
                         // Success
@@ -424,18 +431,6 @@ router.post('/approveTask', (req, res) => {
             })
 
 
-
-
-        // reply.content = "Ok, Approved!";
-        // sendToCai.replies.push(reply);
-        // sendToCai.conversation.memory = {
-        //     "instanceId": req.body.conversation.memory.instanceId,
-        //     "purchOrder": req.body.conversation.memory.purchOrder,
-        //     "task_index": req.body.conversation.memory.task_index,
-        //     "last_skill": "confirm_approve"
-        // }
-        // console.log(sendToCai);
-        // res.send(sendToCai);
     }
 
 
