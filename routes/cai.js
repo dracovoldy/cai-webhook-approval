@@ -341,7 +341,7 @@ router.post('/approveTask', (req, res) => {
         let instanceId = memory.instanceId;
 
         var url2 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve_from_alexa'`;
-        var url1 = `https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/`;
+        
 
         let config1 = {
             auth: {
@@ -356,7 +356,7 @@ router.post('/approveTask', (req, res) => {
             withCredentials: true
         }
 
-        axios.head(url1, config1)
+        axios.head(url2, config1)
             .then((response) => {
                 let token = response.headers["x-csrf-token"];
                 console.log(`\n=============HEADERS===========\n`);
