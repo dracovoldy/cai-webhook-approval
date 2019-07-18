@@ -381,7 +381,7 @@ router.post('/approveTask', (req, res) => {
                     },
                     withCredentials: true
                 }
-                config.headers["x-csrf-token"] = response.headers["x-csrf-token"];
+                config2.headers["x-csrf-token"] = response.headers["x-csrf-token"];
 
                 axios.request(url2, config2)
                     .then((response) => {
