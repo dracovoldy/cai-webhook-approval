@@ -351,7 +351,9 @@ router.post('/approveTask', (req, res) => {
             timeout: 0, // default is `0` (no timeout)
             headers: {
                 'x-csrf-token': 'Fetch',
-                'sap-contextid-accept': 'header'
+                'sap-contextid-accept': 'header',
+                "Access-Control-Allow-Credentials": true,
+                "Access-Control-Allow-Origin": "*",
             },
             withCredentials: true
         }
@@ -381,7 +383,7 @@ router.post('/approveTask', (req, res) => {
                         password: 'rupu@0801'
                     },
                     timeout: 0,
-                    headers: {                        
+                    headers: {
                         "sap-contextid-accept": 'header',
                         "Access-Control-Allow-Credentials": true,
                         "Access-Control-Allow-Origin": "*",
@@ -389,7 +391,7 @@ router.post('/approveTask', (req, res) => {
                     },
                     withCredentials: true
                 }
-                config2.headers["X-CSRF-Token"] = response.headers["x-csrf-token"];              
+                config2.headers["X-CSRF-Token"] = response.headers["x-csrf-token"];
                 // config2.headers["Cookie"] = cookie_value;
 
                 axios.request(url2, config2)
