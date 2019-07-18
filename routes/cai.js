@@ -376,6 +376,10 @@ router.post('/approveTask', (req, res) => {
                     // `method` is the request method to be used when making the request
                     method: 'post', // default
                     baseURL: 'https://p2001172697trial-trial.apim1.hanatrial.ondemand.com/p2001172697trial/Workflow_approval/',
+                    auth: {
+                        username: 'pritamsa',
+                        password: 'rupu@0801'
+                    },
                     timeout: 0,
                     headers: {                        
                         "sap-contextid-accept": 'header',
