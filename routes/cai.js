@@ -383,7 +383,13 @@ router.post('/approveTask', (req, res) => {
                     withCredentials: true
                 }
                 config2.headers["X-CSRF-Token"] = response.headers["x-csrf-token"];
-                config2.headers["Cookie"] = response.headers["set-cookie"];
+
+                let cookie_value = "";
+                response.headers["set-cookie"].map((value => {
+                    cookie_value = cookie_value + value;
+                }));
+
+                config2.headers["Cookie"] = cookie_value;
 
                 axios.request(url2, config2)
                     .then((response) => {
