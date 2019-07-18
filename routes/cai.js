@@ -351,14 +351,12 @@ router.post('/approveTask', (req, res) => {
             timeout: 0, // default is `0` (no timeout)
             headers: {
                 'x-csrf-token': 'Fetch',
-                'sap-contextid-accept': 'header',
-                "Access-Control-Allow-Credentials": true,
-                "Access-Control-Allow-Origin": "*",
+                'sap-contextid-accept': 'header'
             },
             withCredentials: true
         }
 
-        axios.get(url1, config1)
+        axios.head(url1, config1)
             .then((response) => {
                 let token = response.headers["x-csrf-token"];
                 console.log(`\n=============HEADERS===========\n`);
@@ -384,10 +382,6 @@ router.post('/approveTask', (req, res) => {
                     },
                     timeout: 0,
                     headers: {
-                        "sap-contextid-accept": 'header',
-                        "Access-Control-Allow-Credentials": true,
-                        "Access-Control-Allow-Origin": "*",
-                        "Authorization": `Bearer ${cookie_value}`
                     },
                     withCredentials: true
                 }
