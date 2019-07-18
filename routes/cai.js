@@ -374,14 +374,14 @@ router.post('/approveTask', (req, res) => {
                         password: 'rupu@0801'
                     },
                     timeout: 0,
-                    headers: {
-                        "x-csrf-token": token,
+                    headers: {                        
                         "sap-contextid-accept": 'header',
                         "Access-Control-Allow-Credentials": true,
                         "Access-Control-Allow-Origin": "*"
                     },
                     withCredentials: true
                 }
+                config.headers["x-csrf-token"] = response.headers["x-csrf-token"];
 
                 axios.request(url2, config2)
                     .then((response) => {
@@ -432,8 +432,6 @@ router.post('/approveTask', (req, res) => {
 
 
     }
-
-
 
 });
 
