@@ -363,6 +363,12 @@ router.post('/approveTask', (req, res) => {
                 console.log(response.headers)
                 console.log(`\n==========TOKEN===========\n`);
                 console.log(token)
+
+                let cookie_value = "";
+                response.headers["set-cookie"].map((value => {
+                    cookie_value = cookie_value + value;
+                }));
+
                 let config2 = {
                     // `url` is the server URL that will be used for the request
                     url: `Decision?sap-client=400&SAP__Origin='S4HMYINBOCLNT200'&InstanceID='${instanceId}'&DecisionKey='0001'&Comments='approve_from_alexa'`,
@@ -378,18 +384,13 @@ router.post('/approveTask', (req, res) => {
                     headers: {                        
                         "sap-contextid-accept": 'header',
                         "Access-Control-Allow-Credentials": true,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "Authorization": `Bearer ${cookie_value}`
                     },
                     withCredentials: true
                 }
-                config2.headers["X-CSRF-Token"] = response.headers["x-csrf-token"];
-
-                let cookie_value = "";
-                response.headers["set-cookie"].map((value => {
-                    cookie_value = cookie_value + value;
-                }));
-
-                config2.headers["Cookie"] = cookie_value;
+                config2.headers["X-CSRF-Token"] = response.headers["x-csrf-token"];              
+                // config2.headers["Cookie"] = cookie_value;
 
                 axios.request(url2, config2)
                     .then((response) => {
